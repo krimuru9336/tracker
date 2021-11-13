@@ -1,4 +1,4 @@
-package com.example.mytracker;
+package com.example.tracker2;
 
 import org.junit.Test;
 

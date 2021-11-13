@@ -1,5 +1,4 @@
-package com.example.mytracker;
-
+package com.example.tracker2;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -26,7 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.mytracker.databinding.ActivityMapsBinding;
+import com.example.tracker2.databinding.ActivityMapsBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
@@ -68,19 +67,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         ArrayList<ArrayList<Object>> data = helper.getData();
-//        Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show();
-
         for (ArrayList<Object> object : data) {
-            Toast.makeText(getApplicationContext(), "Object:" + object, Toast.LENGTH_SHORT).show();
-                double lat = (double) object.get(0);
-                double longi = (double) object.get(1);
-                LatLng latLng = new LatLng(lat,longi);
-                mMap.addMarker(new MarkerOptions().position(latLng));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 9.0F));
-
-
+            double lat = (double) object.get(1);
+            double longi = (double) object.get(2);
+            LatLng latLng = new LatLng(lat,longi);
+            mMap.addMarker(new MarkerOptions().position(latLng));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 9.0F));
         }
-
     }
 
     public void viewData(View view) {
@@ -89,11 +82,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void addMarker(View view) {
-
-
         Date currentTime = Calendar.getInstance().getTime();
-
-        Toast.makeText(getApplicationContext(), "Current Time: " + currentTime, Toast.LENGTH_SHORT).show();
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(getApplicationContext(), "Permission not granted", Toast.LENGTH_SHORT).show();
