@@ -1,4 +1,5 @@
 package com.example.tracker2;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -70,15 +71,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for (ArrayList<Object> object : data) {
             double lat = (double) object.get(1);
             double longi = (double) object.get(2);
-            LatLng latLng = new LatLng(lat,longi);
+            LatLng latLng = new LatLng(lat, longi);
             mMap.addMarker(new MarkerOptions().position(latLng));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 9.0F));
         }
     }
 
     public void viewData(View view) {
-//        ArrayList<Pair<Double, Double>> data = helper.getData();
-//        Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show();
+        ArrayList<ArrayList<Object>> data = helper.getData();
+        for (ArrayList<Object> object : data) {
+            double lat = (double) object.get(1);
+            double longi = (double) object.get(2);
+            Toast.makeText(getApplicationContext(), lat + ":" + longi, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void addMarker(View view) {
@@ -97,15 +102,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             // Logic to handle location object
                             double lat = location.getLatitude();
                             double longi = location.getLongitude();
-                            LatLng latLng = new LatLng(lat,longi);
+                            LatLng latLng = new LatLng(lat, longi);
                             mMap.addMarker(new MarkerOptions().position(latLng));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 9.0F));
                             helper.insertData("kri", lat, longi, currentTime.toString());
+                            Toast.makeText(getApplicationContext(), "Added!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-
-        Toast.makeText(getApplicationContext(), "Added!", Toast.LENGTH_SHORT).show();
     }
 
     private void checkPermissions(String permission, String name, int requestCode) {
