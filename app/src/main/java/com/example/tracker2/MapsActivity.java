@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -78,12 +79,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void viewData(View view) {
-        ArrayList<ArrayList<Object>> data = helper.getData();
-        for (ArrayList<Object> object : data) {
-            double lat = (double) object.get(1);
-            double longi = (double) object.get(2);
-            Toast.makeText(getApplicationContext(), lat + ":" + longi, Toast.LENGTH_SHORT).show();
-        }
+        Intent intent = new Intent(this, DataActivity.class);
+        startActivity(intent);
     }
 
     public void addMarker(View view) {
