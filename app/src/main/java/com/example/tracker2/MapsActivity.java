@@ -19,6 +19,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Editable;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,9 +87,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for (ArrayList<Object> object : data) {
             double lat = (double) object.get(1);
             double longi = (double) object.get(2);
-            LatLng latLng = new LatLng(lat, longi);
-            mMap.addMarker(new MarkerOptions().position(latLng));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 9.0F));
+            showMap(new LatLng(lat, longi));
         }
     }
 
@@ -98,48 +97,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    String tit=null;
-    public void addMarker(View view) {
-        Date currentTime = Calendar.getInstance().getTime();
-//        getLocationName();
-//        Toast.makeText(getApplicationContext(), tit , Toast.LENGTH_SHORT).show();
 
-        getCurrentLocation(currentTime);
+    public void addMarker(View view) {
+
+        getLocationName();
+
+
     }
+
+
 
     private void getLocationName() {
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MapsActivity.this);
-        // Set title, icon, can not cancel properties.
-        alertDialogBuilder.setTitle("Wo bist du?");
-        alertDialogBuilder.setIcon(R.drawable.ic_launcher_background);
-        alertDialogBuilder.setCancelable(false);
-        // Init popup dialog view and it's ui controls.
-        LayoutInflater layoutInflater = LayoutInflater.from(MapsActivity.this);
-        // Inflate the popup dialog from a layout xml file.
-        popupInputDialogView = layoutInflater.inflate(R.layout.get_title_popup, null);
-        // Get user input edittext and button ui controls in the popup dialog.
-        //EditText titleEditText = (EditText) popupInputDialogView.findViewById(R.id.title);
-        Button addLocationButton = (Button) popupInputDialogView.findViewById(R.id.addLocationButton);
-        // Set the inflated layout view object to the AlertDialog builder.
-        alertDialogBuilder.setView(popupInputDialogView);
-        // Create AlertDialog and show.
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        AlertDialog.Builder alert = new AlertDialog.Builder(MapsActivity.this);
+        final EditText edittext = new EditText(this);
 
-        addLocationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        alert.setTitle("Wo bist du?");
 
-                EditText titleEditText = findViewById(R.id.title);
-                tit = titleEditText.getText().toString();
-                alertDialog.cancel();
+        alert.setView(edittext);
+
+
+        alert.setPositiveButton("Add!", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                String title = edittext.getText().toString();
+                getCurrentLocation(title);
             }
         });
 
+        alert.show();
     }
+     private void getCurrentLocation(String locationName) {
 
-    private void getCurrentLocation(Date currentTime) {
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -158,11 +147,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 // Logic to handle location object
                                 double lat = location.getLatitude();
                                 double longi = location.getLongitude();
-                                LatLng latLng = new LatLng(lat, longi);
-                                mMap.addMarker(new MarkerOptions().position(latLng));
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 9.0F));
-                                helper.insertData("kri", lat, longi, currentTime.toString());
-                                Toast.makeText(getApplicationContext(), "Added!", Toast.LENGTH_SHORT).show();
+                                showMap(new LatLng(lat, longi));
+                                insertDataIntoDB(locationName,lat,longi);
+
                             }
                         }
                     });
@@ -172,9 +159,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void initPopupViewControls() {
+    private void insertDataIntoDB(String locationName, double lat, double longi) {
+        helper.insertData(locationName, lat, longi, Calendar.getInstance().getTime().toString());
+        Toast.makeText(getApplicationContext(), "Added!", Toast.LENGTH_SHORT).show();
+    }
 
-
+    private void showMap(LatLng latLng) {
+        mMap.addMarker(new MarkerOptions().position(latLng));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 9.0F));
     }
 
     private void checkPermissions(String permission, String name, int requestCode) {
@@ -221,6 +213,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
+
+
 
 //    public void checkLocation() {
 //

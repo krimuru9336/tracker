@@ -20,5 +20,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/addLocationButton"
         android:text="Add!"
-        android:layout_margin="6dp"/>
+        android:layout_margin="6dp"
+        android:onClick="addLocationButtonClick"
+        />
 </LinearLayout>
