@@ -40,10 +40,13 @@ public class DataActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     //helper.showMap(new LatLng(lat,longi));
                     Intent intent = new Intent(v.getContext(), MapsActivity.class);
-                    intent.putExtra("isReturn","true");
-                    intent.putExtra("Latitude",lat);
-                    intent.putExtra("Longitude",longi);
-                    startActivityForResult(intent,1);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Latitude", lat+"");
+                    bundle.putString("Longitude", longi+"");
+//                    intent.putExtra("isReturn","true");
+//                    intent.putExtra("Latitude",lat);
+//                    intent.putExtra("Longitude",longi);
+                    intent.putExtras(bundle);
                     setResult(RESULT_OK, intent);
                     finish();
                 }

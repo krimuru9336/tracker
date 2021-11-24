@@ -109,10 +109,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
-                String strEditText = data.getStringExtra("isReturn");
-                Toast.makeText(getApplicationContext(), strEditText, Toast.LENGTH_SHORT).show();
+                assert data != null;
+//                String str = data.getStringExtra("Latitude");
+//                Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
+                Double latitude = Double.parseDouble(data.getStringExtra("Latitude"));
+                Double longitude = Double.parseDouble(data.getStringExtra("Longitude"));
+
+                helper.showMap(new LatLng(latitude,longitude),mMap);
             }
         }
     }
@@ -143,15 +149,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void viewData(View view) {
         Intent intent = new Intent(this, DataActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,1);
     }
 
     public void show(LatLng latLng) {
         Toast.makeText(getApplicationContext(), "Hi", Toast.LENGTH_LONG).show();
 
     }
-
-
 
     public void addMarker(View view) {
 
