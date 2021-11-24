@@ -2,7 +2,9 @@ package com.example.tracker2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -33,6 +35,19 @@ public class DataActivity extends AppCompatActivity {
             double longi = (double) object.get(2);
             String time = object.get(3).toString();
             textView.setText(title+ " " + lat  + " " + longi  + " " + time);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //helper.showMap(new LatLng(lat,longi));
+                    Intent intent = new Intent(v.getContext(), MapsActivity.class);
+                    intent.putExtra("isReturn","true");
+                    intent.putExtra("Latitude",lat);
+                    intent.putExtra("Longitude",longi);
+                    startActivityForResult(intent,1);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
             tbrow.addView(textView);
             tableLayout.addView(tbrow);
         }

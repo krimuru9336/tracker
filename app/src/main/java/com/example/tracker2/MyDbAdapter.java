@@ -7,6 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 
 public class MyDbAdapter {
@@ -25,6 +30,12 @@ public class MyDbAdapter {
         contentValues.put(MyDbHelper.TIME, time);
         long id = dbb.insert(MyDbHelper.TABLE_NAME, null, contentValues);
         return id;
+    }
+
+    public void showMap(LatLng latLng, GoogleMap mMap) {
+
+        mMap.addMarker(new MarkerOptions().position(latLng));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 9.0F));
     }
 
     public ArrayList<ArrayList<Object>> getData() {
