@@ -148,7 +148,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void viewData(View view) {
-        Intent intent = new Intent(this, DataActivity.class);
+        Intent intent = new Intent(this, CustomListAdapter.class);
         startActivityForResult(intent,1);
     }
 

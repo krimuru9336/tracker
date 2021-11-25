@@ -33,7 +33,7 @@ public class DataActivity extends AppCompatActivity {
             double lat = (double) object.get(1);
             double longi = (double) object.get(2);
             String time = object.get(3).toString();
-            list.add(new Card(locationName,time));
+            list.add(new Card(locationName,lat,longi,time));
 
 //            textView.setOnClickListener(new View.OnClickListener() {
 //                @Override
