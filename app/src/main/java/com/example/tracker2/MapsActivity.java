@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.LauncherActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -54,7 +56,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     MyDbAdapter helper;
     private FusedLocationProviderClient fusedLocationClient;
     View popupInputDialogView;
-    String latitude, isReturn;
+    TextView coor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +65,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        coor = findViewById(R.id.coordinates);
+        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                .getBoolean("isFirstRun", true);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("preferences", MODE_PRIVATE);
-
-        if (sharedPreferences.getBoolean("firstStart", true)) {
-            showStartDialog();
+        if (isFirstRun) {
+            //show sign up activity
+            startActivity(new Intent(MapsActivity.this, Launcher.class));
+            Toast.makeText(getApplicationContext(), "FIRST", Toast.LENGTH_SHORT).show();
         }
+
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isFirstRun", false).commit();
+
         LayoutInflater layoutInflater = LayoutInflater.from(MapsActivity.this);
         popupInputDialogView = layoutInflater.inflate(R.layout.get_title_popup, null);
 
@@ -87,52 +97,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
     }
 
-    private void showStartDialog() {
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(MapsActivity.this);
-        final EditText edittext = new EditText(this);
-
-        alert.setTitle("Wo bist du?");
-
-        alert.setView(edittext);
-
-        alert.show();
-
-        SharedPreferences sharedPreferences = getSharedPreferences("preferences", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("firstStart", false);
-        editor.apply();
+    private void LoadPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String locationName = sharedPreferences.getString("locationName", "My Dick");
+        double  latitude = Double.parseDouble(sharedPreferences.getString("latitude", "50.6"));
+        double longitude = Double.parseDouble(sharedPreferences.getString("longitude", "9.6"));
+        helper.showMap(locationName, new LatLng(latitude,longitude),mMap);
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
-                assert data != null;
-//                String str = data.getStringExtra("Latitude");
-//                Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
-                Double latitude = Double.parseDouble(data.getStringExtra("Latitude"));
-                Double longitude = Double.parseDouble(data.getStringExtra("Longitude"));
-
-                helper.showMap(new LatLng(latitude,longitude),mMap);
-            }
-        }
-    }
-
-    //    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 1) {
-//            if(resultCode == RESULT_OK) {
-//                String strEditText = data.getStringExtra("isReturn");
-//                Toast.makeText(getApplicationContext(), strEditText, Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -141,20 +117,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ArrayList<ArrayList<Object>> data = helper.getData();
         for (ArrayList<Object> object : data) {
+            String locationName = (String) object.get(0);
             double lat = (double) object.get(1);
             double longi = (double) object.get(2);
-            helper.showMap(new LatLng(lat, longi),mMap);
+            helper.showMap(locationName, new LatLng(lat, longi),mMap);
         }
+
+        LoadPreferences();
     }
+
 
     public void viewData(View view) {
-        Intent intent = new Intent(this, CustomListAdapter.class);
+        Intent intent = new Intent(this, DataActivity.class);
         startActivityForResult(intent,1);
-    }
-
-    public void show(LatLng latLng) {
-        Toast.makeText(getApplicationContext(), "Hi", Toast.LENGTH_LONG).show();
-
     }
 
     public void addMarker(View view) {
@@ -169,8 +144,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         alert.setPositiveButton("Add!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
-                String title = edittext.getText().toString();
-                getCurrentLocation(title);
+                String locationName = edittext.getText().toString();
+                getCurrentLocation(locationName);
             }
         });
 
@@ -196,7 +171,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 // Logic to handle location object
                                 double lat = location.getLatitude();
                                 double longi = location.getLongitude();
-                                helper.showMap(new LatLng(lat, longi),mMap);
+                                helper.showMap(locationName,new LatLng(lat, longi),mMap);
                                 insertDataIntoDB(locationName,lat,longi);
                             }
                         }

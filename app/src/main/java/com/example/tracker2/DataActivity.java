@@ -6,6 +6,7 @@ import androidx.cardview.widget.CardView;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -48,8 +49,7 @@ public class DataActivity extends AppCompatActivity {
 //                    finish();
 //                }
 //            });
-
-        }
+           }
         listView.setAdapter(adapter);
     }
 }

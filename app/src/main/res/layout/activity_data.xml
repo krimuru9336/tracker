@@ -11,52 +11,43 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/cardView">
+        android:id="@+id/cardView"
+        android:padding="15dp">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            android:orientation="vertical"
+            android:background="@color/black">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/locationName"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:textColor="@color/white"
                     android:id="@+id/locationTextView"
+                    android:padding="21dp"
                     />
 
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/time"
-                    />
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:id="@+id/coordinates"
+                android:padding="21dp"
+                />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/timeTextView"
+                    android:textSize="24sp"
+                    android:textColor="@color/white"
+                    android:padding="21dp"
                     />
 
             </LinearLayout>
 
-
-        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
 </ScrollView>

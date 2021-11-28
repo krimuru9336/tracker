@@ -1,17 +1,17 @@
 package com.example.tracker2;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ public class CustomListAdapter extends ArrayAdapter<Card> {
     private static class ViewHolder {
         TextView locationName;
         TextView time;
+        TextView coordinates;
         CardView cardView;
     }
 
@@ -37,9 +38,11 @@ public class CustomListAdapter extends ArrayAdapter<Card> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         String locationNameText = getItem(position).getLocationName();
+        double latitude = getItem(position).getLatitude();
+        double longitude = getItem(position).getLongitude();
         String timeText = getItem(position).getTime();
-        double latitude = getItem(position).getLat();
-        double longitude = getItem(position).getLongi();
+
+        Toast.makeText(context, locationNameText+","+longitude, Toast.LENGTH_SHORT).show();
 
         ViewHolder viewHolder;
 
@@ -49,6 +52,8 @@ public class CustomListAdapter extends ArrayAdapter<Card> {
             viewHolder = new ViewHolder();
             viewHolder.locationName = (TextView) convertView.findViewById(R.id.locationTextView);
             viewHolder.time = (TextView) convertView.findViewById(R.id.timeTextView);
+            viewHolder.coordinates = (TextView) convertView.findViewById(R.id.coordinates);
+            viewHolder.cardView = (CardView)  convertView.findViewById(R.id.cardView);
 
             convertView.setTag(viewHolder);
         }
@@ -58,10 +63,12 @@ public class CustomListAdapter extends ArrayAdapter<Card> {
 
         viewHolder.locationName.setText(locationNameText);
         viewHolder.time.setText(timeText);
+        viewHolder.coordinates.setText(latitude + ","+longitude);
+
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendCoordinatesToMapsActivity(v, latitude, longitude);
+                sendCoordinatesToMapsActivity(v, locationNameText, latitude, longitude);
             }
 
         });
@@ -70,7 +77,17 @@ public class CustomListAdapter extends ArrayAdapter<Card> {
         return convertView;
     }
 
-    public void sendCoordinatesToMapsActivity(View v, double latitude, double longitude) {
+    public void sendCoordinatesToMapsActivity(View v, String locationName, double latitude, double longitude) {
        //Write code to send lat and longi
+        Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("locationName",locationName);
+        editor.putString("latitude", latitude+"");
+        editor.putString("longitude", longitude+"");
+        editor.commit();
+        Intent sd=new Intent(context,MapsActivity.class);
+        context.startActivity(sd);
     }
 }

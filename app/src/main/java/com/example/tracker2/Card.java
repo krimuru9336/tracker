@@ -2,13 +2,15 @@ package com.example.tracker2;
 
 public class Card {
     private String locationName;
-    private double lat;
-    private double longi;
+    private double latitude;
+    private double longitude;
     private String time;
 
 
-    public Card(String locationName, double lat, double longi, String time) {
+    public Card(String locationName, double latitude, double longitude, String time) {
         this.locationName = locationName;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.time = time;
     }
 
@@ -20,20 +22,20 @@ public class Card {
         this.locationName = locationName;
     }
 
-    public double getLat() {
-        return lat;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLat(double lat) {
-        this.lat = lat;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public double getLongi() {
-        return longi;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLongi(double longi) {
-        this.longi = longi;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public String getTime() {
