@@ -1,53 +1,39 @@
 package com.example.tracker2;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.LauncherActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.text.Editable;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.tracker2.databinding.ActivityMapsBinding;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -65,6 +51,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        helper = new MyDbAdapter(this);
+
         coor = findViewById(R.id.coordinates);
         Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getBoolean("isFirstRun", true);
@@ -72,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (isFirstRun) {
             //show sign up activity
             startActivity(new Intent(MapsActivity.this, Launcher.class));
-            Toast.makeText(getApplicationContext(), "FIRST", Toast.LENGTH_SHORT).show();
+            helper.insertHistoricData();
         }
 
 
@@ -89,8 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             checkPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, "Location", locationRQ);
         }
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        helper = new MyDbAdapter(this);
+
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -102,11 +90,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    private void LoadPreferences(){
+    private void loadSelectedCardOnMap(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String locationName = sharedPreferences.getString("locationName", "My Dick");
-        double  latitude = Double.parseDouble(sharedPreferences.getString("latitude", "50.6"));
-        double longitude = Double.parseDouble(sharedPreferences.getString("longitude", "9.6"));
+        String locationName = sharedPreferences.getString("locationName", "Drachenschlucht");
+        double  latitude = Double.parseDouble(sharedPreferences.getString("latitude", "50.954200"));
+        double longitude = Double.parseDouble(sharedPreferences.getString("longitude", "10.309089"));
         helper.showMap(locationName, new LatLng(latitude,longitude),mMap);
     }
 
@@ -120,10 +108,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String locationName = (String) object.get(0);
             double lat = (double) object.get(1);
             double longi = (double) object.get(2);
+            Toast.makeText(getApplicationContext(), locationName, Toast.LENGTH_SHORT).show();
             helper.showMap(locationName, new LatLng(lat, longi),mMap);
         }
 
-        LoadPreferences();
+        loadSelectedCardOnMap();
     }
 
 
@@ -231,38 +220,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
-
-
-
-//    public void checkLocation() {
-//
-//        boolean gps_enabled;
-//        try {
-//            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-//        }catch (Exception ex){}
-//        boolean network_enabled;
-//        try{
-//            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-//        }catch (Exception ex){}
-//        if(!gps_enabled && !network_enabled){
-//            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-//            dialog.setMessage(getResources().getString(R.string.gps_network_not_enabled));
-//            dialog.setPositiveButton(getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-//                    Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//                    Startup.this.startActivity(myIntent);
-//                }
-//            });
-//            dialog.setNegativeButton(getString(R.string.Cancel), new DialogInterface.OnClickListener() {
-//
-//                @Override
-//                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-//                    // TODO Auto-generated method stub
-//
-//                }
-//            });
-//            dialog.show();
-//        }
-//    }
 }

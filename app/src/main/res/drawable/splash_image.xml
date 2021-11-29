@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/white"/>
-   <item android:drawable="@drawable/ic_baseline_ac_unit_24" android:gravity="center"/>
+    <item android:drawable="@color/bier"/>
+   <item android:drawable="@drawable/ic_bier" android:gravity="center"/>
 
 </layer-list>

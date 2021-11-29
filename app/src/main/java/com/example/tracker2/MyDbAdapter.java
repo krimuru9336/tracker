@@ -2,9 +2,11 @@ package com.example.tracker2;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -14,6 +16,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class MyDbAdapter {
@@ -40,11 +44,10 @@ public class MyDbAdapter {
         markerOptions.title(locationName);
         Objects.requireNonNull(mMap.addMarker(markerOptions)).showInfoWindow();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 9.0F));
-//        Marker.showInfoWindow();
+
     }
 
     public ArrayList<ArrayList<Object>> getData() {
-//        insertHistoricData();
         SQLiteDatabase db = myhelper.getWritableDatabase();
         String[] columns = {MyDbHelper.UID, MyDbHelper.LOCATION_NAME, MyDbHelper.LATITUDE, MyDbHelper.LONGITUDE, MyDbHelper.TIME};
         Cursor cursor = db.query(MyDbHelper.TABLE_NAME, columns, null, null, null, null, null);
@@ -130,13 +133,37 @@ public class MyDbAdapter {
     public void insertHistoricData() {
         SQLiteDatabase dbb = myhelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        for (int i = 0; i < 3; i++) {
-            contentValues.put(MyDbHelper.LOCATION_NAME, "LocationName" + 50.55 + i);
-            contentValues.put(MyDbHelper.LATITUDE, 50.55 + i);
-            contentValues.put(MyDbHelper.LONGITUDE, 9.68 + i);
-            contentValues.put(MyDbHelper.TIME, "Time" + 9.68 + i);
-            long id = dbb.insert(MyDbHelper.TABLE_NAME, null, contentValues);
+
+        ArrayList<ArrayList<Object>> locationArray = new ArrayList<>();
+
+        locationArray.add(new ArrayList<>(Arrays.asList("Drachenschlucht", 50.954200, 10.309089, "Sun Jun 27 18:03:09 GMT +01:00 2021")));
+        locationArray.add(new ArrayList<>(Arrays.asList("Bad Orb", 50.206161, 9.358713, "16, 24/09")));
+        locationArray.add(new ArrayList<>(Arrays.asList("Bad Orb Hasel Tal Trail", 50.222318, 9.389491, "17, 13th july")));
+        locationArray.add(new ArrayList<>(Arrays.asList("Bad Orb Tower", 50.226448, 9.341789, "19, 22 july")));
+
+        try {
+            for (ArrayList<Object> object : locationArray) {
+
+                contentValues.put(MyDbHelper.LOCATION_NAME, (String) object.get(0));
+                contentValues.put(MyDbHelper.LATITUDE, (double) object.get(1));
+                contentValues.put(MyDbHelper.LONGITUDE, (double) object.get(2));
+                contentValues.put(MyDbHelper.TIME, (String) object.get(3));
+                long id = dbb.insert(MyDbHelper.TABLE_NAME, null, contentValues);
+
+            }
         }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+//        for (int i = 0; i < 3; i++) {
+//            contentValues.put(MyDbHelper.LOCATION_NAME, "LocationName" + 50.55 + i);
+//            contentValues.put(MyDbHelper.LATITUDE, 50.55 + i);
+//            contentValues.put(MyDbHelper.LONGITUDE, 9.68 + i);
+//            contentValues.put(MyDbHelper.TIME, "Time" + 9.68 + i);
+//            long id = dbb.insert(MyDbHelper.TABLE_NAME, null, contentValues);
+//        }
     }
 
 }

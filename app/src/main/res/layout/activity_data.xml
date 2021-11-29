@@ -25,16 +25,16 @@
                     android:textSize="24sp"
                     android:textColor="@color/white"
                     android:id="@+id/locationTextView"
-                    android:padding="21dp"
+                    android:padding="12dp"
                     />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textColor="@color/grey"
                 android:id="@+id/coordinates"
-                android:padding="21dp"
+                android:padding="12dp"
                 />
 
                 <TextView
@@ -43,7 +43,7 @@
                     android:id="@+id/timeTextView"
                     android:textSize="24sp"
                     android:textColor="@color/white"
-                    android:padding="21dp"
+                    android:padding="12dp"
                     />
 
             </LinearLayout>

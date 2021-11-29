@@ -8,4 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#D01C1F</color>
+    <color name="bier">#F28E1C</color>
+    <color name="bier_dark">#cf750e</color>
+    <color name="grey">#a89a85</color>
 </resources>
