@@ -78,47 +78,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             checkPermissions(Manifest.permission.ACCESS_COARSE_LOCATION, "Location", locationRQ);
         }
 
-
-
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
     }
 
 
-    private void loadSelectedCardOnMap(){
+    private void loadSelectedCardOnMap() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String locationName = sharedPreferences.getString("locationName", "Drachenschlucht");
-        double  latitude = Double.parseDouble(sharedPreferences.getString("latitude", "50.954200"));
+        double latitude = Double.parseDouble(sharedPreferences.getString("latitude", "50.954200"));
         double longitude = Double.parseDouble(sharedPreferences.getString("longitude", "10.309089"));
-        helper.showMap(locationName, new LatLng(latitude,longitude),mMap);
+        helper.showMap(locationName, new LatLng(latitude, longitude), mMap);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-
         ArrayList<ArrayList<Object>> data = helper.getData();
+
         for (ArrayList<Object> object : data) {
             String locationName = (String) object.get(0);
             double lat = (double) object.get(1);
             double longi = (double) object.get(2);
-            Toast.makeText(getApplicationContext(), locationName, Toast.LENGTH_SHORT).show();
-            helper.showMap(locationName, new LatLng(lat, longi),mMap);
+            helper.showMap(locationName, new LatLng(lat, longi), mMap);
         }
-
         loadSelectedCardOnMap();
     }
 
 
     public void viewData(View view) {
         Intent intent = new Intent(this, DataActivity.class);
-        startActivityForResult(intent,1);
+        startActivityForResult(intent, 1);
     }
 
     public void addMarker(View view) {
@@ -127,9 +119,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final EditText edittext = new EditText(this);
 
         alert.setTitle("Wo bist du?");
-
         alert.setView(edittext);
-
         alert.setPositiveButton("Add!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
@@ -140,16 +130,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         alert.show();
     }
-     private void getCurrentLocation(String locationName) {
 
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+    private void getCurrentLocation(String locationName) {
+
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(getApplicationContext(), "Permission not granted", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -160,13 +151,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 // Logic to handle location object
                                 double lat = location.getLatitude();
                                 double longi = location.getLongitude();
-                                helper.showMap(locationName,new LatLng(lat, longi),mMap);
-                                insertDataIntoDB(locationName,lat,longi);
+                                helper.showMap(locationName, new LatLng(lat, longi), mMap);
+                                insertDataIntoDB(locationName, lat, longi);
                             }
                         }
                     });
-        }
-        else {
+        } else {
             Toast.makeText(getApplicationContext(), "Please turn on your location", Toast.LENGTH_SHORT).show();
         }
     }
@@ -205,17 +195,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         new AlertDialog.Builder(this)
                 .setTitle("Grant Location Permission")
                 .setMessage("This will let you save your location using your GPS")
-
-                // Specifying a listener allows you to take an action before dismissing the dialog.
-                // The dialog is automatically dismissed when a dialog button is clicked.
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // Continue with delete operation
+
                         ActivityCompat.requestPermissions(MapsActivity.this, new String[]{permission}, requestCode);
                     }
                 })
-
-                // A null listener allows the button to dismiss the dialog and take no further action.
                 .setNegativeButton(android.R.string.no, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();

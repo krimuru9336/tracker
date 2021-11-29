@@ -113,23 +113,6 @@ public class MyDbAdapter {
         }
     }
 
-
-    //    public int delete(String uname) {
-//        SQLiteDatabase db = myhelper.getWritableDatabase();
-//        String[] whereArgs = {uname};
-//
-//        int count = db.delete(MyDbHelper.TABLE_NAME, MyDbHelper.NAME + " = ?", whereArgs);
-//        return count;
-//    }
-//
-//    public int updateName(String oldName, String newName) {
-//        SQLiteDatabase db = myhelper.getWritableDatabase();
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put(MyDbHelper.NAME, newName);
-//        String[] whereArgs = {oldName};
-//        int count = db.update(MyDbHelper.TABLE_NAME, contentValues, MyDbHelper.NAME + " = ?", whereArgs);
-//        return count;
-//    }
     public void insertHistoricData() {
         SQLiteDatabase dbb = myhelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -155,15 +138,24 @@ public class MyDbAdapter {
         catch (Exception e) {
             e.printStackTrace();
         }
-
-
-//        for (int i = 0; i < 3; i++) {
-//            contentValues.put(MyDbHelper.LOCATION_NAME, "LocationName" + 50.55 + i);
-//            contentValues.put(MyDbHelper.LATITUDE, 50.55 + i);
-//            contentValues.put(MyDbHelper.LONGITUDE, 9.68 + i);
-//            contentValues.put(MyDbHelper.TIME, "Time" + 9.68 + i);
-//            long id = dbb.insert(MyDbHelper.TABLE_NAME, null, contentValues);
-//        }
     }
-
 }
+
+//Code to update and delete DB
+
+//    public int delete(String uname) {
+//        SQLiteDatabase db = myhelper.getWritableDatabase();
+//        String[] whereArgs = {uname};
+//
+//        int count = db.delete(MyDbHelper.TABLE_NAME, MyDbHelper.NAME + " = ?", whereArgs);
+//        return count;
+//    }
+//
+//    public int updateName(String oldName, String newName) {
+//        SQLiteDatabase db = myhelper.getWritableDatabase();
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put(MyDbHelper.NAME, newName);
+//        String[] whereArgs = {oldName};
+//        int count = db.update(MyDbHelper.TABLE_NAME, contentValues, MyDbHelper.NAME + " = ?", whereArgs);
+//        return count;
+//    }
