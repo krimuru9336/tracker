@@ -50,7 +50,7 @@ public class MyDbAdapter {
     public ArrayList<ArrayList<Object>> getData() {
         SQLiteDatabase db = myhelper.getWritableDatabase();
         String[] columns = {MyDbHelper.UID, MyDbHelper.LOCATION_NAME, MyDbHelper.LATITUDE, MyDbHelper.LONGITUDE, MyDbHelper.TIME};
-        Cursor cursor = db.query(MyDbHelper.TABLE_NAME, columns, null, null, null, null, null);
+        Cursor cursor = db.query(MyDbHelper.TABLE_NAME, columns, null, null, null, null, MyDbHelper.UID + " DESC");
 
         ArrayList<ArrayList<Object>> locationArray = new ArrayList<>();
 
@@ -119,10 +119,10 @@ public class MyDbAdapter {
 
         ArrayList<ArrayList<Object>> locationArray = new ArrayList<>();
 
-        locationArray.add(new ArrayList<>(Arrays.asList("Drachenschlucht", 50.954200, 10.309089, "Sun Jun 27 18:03:09 GMT +01:00 2021")));
-        locationArray.add(new ArrayList<>(Arrays.asList("Bad Orb", 50.206161, 9.358713, "16, 24/09")));
-        locationArray.add(new ArrayList<>(Arrays.asList("Bad Orb Hasel Tal Trail", 50.222318, 9.389491, "17, 13th july")));
-        locationArray.add(new ArrayList<>(Arrays.asList("Bad Orb Tower", 50.226448, 9.341789, "19, 22 july")));
+        locationArray.add(new ArrayList<>(Arrays.asList("Drachenschlucht", 50.954200, 10.309089, "Sun Jun 27 18:03:09 \nGMT +01:00 2021")));
+        locationArray.add(new ArrayList<>(Arrays.asList("Bad Orb", 50.206161, 9.358713, "Fri Sep 24 16:04:24 \nGMT +01:00 2021")));
+        locationArray.add(new ArrayList<>(Arrays.asList("Bad Orb Hasel Tal Trail", 50.222318, 9.389491, "Tue Jul 13 17:15:34 \nGMT +01:00 2021")));
+        locationArray.add(new ArrayList<>(Arrays.asList("Bad Orb Tower", 50.226448, 9.341789, "Thu Jul 22 22:40:03 \nGMT +01:00 2021")));
 
         try {
             for (ArrayList<Object> object : locationArray) {
