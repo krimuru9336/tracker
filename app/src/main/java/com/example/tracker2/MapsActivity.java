@@ -117,6 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         AlertDialog.Builder alert = new AlertDialog.Builder(MapsActivity.this);
         final EditText edittext = new EditText(this);
+        edittext.setPadding(90,60,90,45);
 
         alert.setTitle("Wo bist du?");
         alert.setView(edittext);
