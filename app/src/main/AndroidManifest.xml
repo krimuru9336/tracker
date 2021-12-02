@@ -13,7 +13,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/blow_tracker_icon"
         android:label="@string/app_name"
         android:launchMode="singleTop"
         android:roundIcon="@mipmap/ic_launcher_round"

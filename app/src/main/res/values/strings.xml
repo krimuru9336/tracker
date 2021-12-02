@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tracker2</string>
-    <string name="title_activity_maps">MapsActivity</string>
+    <string name="app_name">Blow Tracker</string>
+    <string name="title_activity_maps">Blow Tracker</string>
     <string name="startButtonText">Jetzt anfangen!</string>
 </resources>
