@@ -8,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 
@@ -41,8 +39,6 @@ public class CustomListAdapter extends ArrayAdapter<Card> {
         double latitude = getItem(position).getLatitude();
         double longitude = getItem(position).getLongitude();
         String timeText = getItem(position).getTime();
-
-        Toast.makeText(context, locationNameText+","+longitude, Toast.LENGTH_SHORT).show();
 
         ViewHolder viewHolder;
 
@@ -78,8 +74,6 @@ public class CustomListAdapter extends ArrayAdapter<Card> {
     }
 
     public void sendCoordinatesToMapsActivity(View v, String locationName, double latitude, double longitude) {
-       //Write code to send lat and longi
-        Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();

@@ -191,7 +191,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void showDialog(String permission, String name, int requestCode) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        Toast.makeText(getApplicationContext(), "IN SHOW DIALOG", Toast.LENGTH_SHORT).show();
         new AlertDialog.Builder(this)
                 .setTitle("Grant Location Permission")
                 .setMessage("This will let you save your location using your GPS")

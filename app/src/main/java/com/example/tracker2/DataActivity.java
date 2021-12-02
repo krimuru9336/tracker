@@ -1,13 +1,8 @@
 package com.example.tracker2;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-
 import android.os.Bundle;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class DataActivity extends AppCompatActivity {
